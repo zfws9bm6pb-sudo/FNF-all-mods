@@ -1,0 +1,42 @@
+package;
+
+import flixel.FlxState;
+import flixel.sound.FlxSound;
+import flixel.ui.FlxBar;
+import haxe.Json;
+import sys.io.File;
+
+// Structure defining chart data
+typedef SwagSong = {
+    var song: String;
+    var bpm: Float;
+    var speed: Float;
+    var notes: Array<Dynamic>;
+}
+
+class PlayState extends FlxState {
+    public static var SONG: SwagSong;
+    private var inst: FlxSound;
+    private var voices: FlxSound;
+
+    override public function create(): Void {
+        super.create();
+
+        // Load chart JSON dynamically from a mod folder
+        var rawJson: String = File.getContent("mods/custom_mod/data/my-song/my-song.json");
+        SONG = Json.parse(rawJson).song;
+
+        // Load Audio
+        inst = new FlxSound().loadEmbedded("mods/custom_mod/songs/my-song/Inst.ogg");
+        voices = new FlxSound().loadEmbedded("mods/custom_mod/songs/my-song/Voices.ogg");
+
+        inst.play();
+        voices.play();
+    }
+
+    override public function update(elapsed: Float): Void {
+        super.update(elapsed);
+
+        // Standard note hit detection logic would go here
+    }
+}
